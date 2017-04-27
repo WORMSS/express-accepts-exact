@@ -1,3 +1,4 @@
+const accepts = require("accepts");
 module.exports = function acceptsExact(type) {
     if ( typeof type === "string" ) {
         return function (req, res, next) {
