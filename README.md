@@ -2,6 +2,8 @@
 
 Simple express middleware for filtering routes by exact matches of Accepts header.
 
+This is useful for having routes that behave like github's api with experimental features that require one of the accepts be `application/vnd.github.pegasus` allowing clients to opt into possible breaking changes.
+
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 
@@ -16,22 +18,19 @@ $ npm install express-accepts-exact --save
 ```
 
 ## Example
-
-```js
-app.get("/api/custom-download/:file", require("express-accepts-exact")("application/vnd.mydomain.custom"), getFile);
-```
-
-```js
-let acceptExact = require("express-accepts-exact");
-app.get("/api/custom-download/:file", acceptExact(["application/vnd.mydomain.custom", "plain/text"]), getFile);
-```
-
+Only use this route if accepts header contains `application/vnd.mydomain.experimental`.
 ```js 
 let acceptExact = require("express-accepts-exact");
 let acceptExperimental = acceptExact("application/vnd.mydomain.experimental");
 
 router.get("/api/file/:file", acceptExperimental, getFileExperimental);
 router.get("/api/file/:file", getFile); // Fallback to non experimental version.
+```
+
+Only use this route if accepts header contains `application/vnd.mydomain.custom` or `plain/text`
+```js
+let acceptExact = require("express-accepts-exact");
+app.get("/api/custom-download/:file", acceptExact(["application/vnd.mydomain.custom", "plain/text"]), getFile);
 ```
 
 ## API
